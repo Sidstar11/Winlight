@@ -51,7 +51,7 @@ def studio_home(request):
         'crew_form': CrewMemberForm(),
         'article_form': ArticleForm(),
     }
-    return render(request, 'Winlight_app/index.html', context)
+    return render(request, 'index.html', context)
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import RecentWork, UpcomingProject, CrewMember, Article
@@ -142,7 +142,7 @@ def studio_home(request):
         'recent_form': RecentWorkForm(), 'upcoming_form': UpcomingProjectForm(),
         'crew_form': CrewMemberForm(), 'article_form': ArticleForm(),
     }
-    return render(request, 'Winlight_app/index.html', context)
+    return render(request, 'index.html', context)
 
 # NEW: Independent Roster Subpage
 def all_crew_members(request):
