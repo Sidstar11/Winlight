@@ -1,0 +1,57 @@
+{% extends 'Winlight_app/base.html' %}
+
+{% block title %}Production Vault | Winlight Studio{% endblock %}
+
+{% block extra_css %}
+<style>
+    body { background: #050505; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+    .title-block { text-align: center; margin-top: 18vh; margin-bottom: 4rem; }
+    .title-block h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 8vw, 5.5rem); font-style: italic; font-weight: 900; }
+    .archive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 3rem; margin-bottom: 5rem; }
+    .slate-card { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 16px; overflow: hidden; opacity: 0; transform: translateY(30px); }
+    .slate-img { height: 280px; overflow: hidden; }
+    .slate-img img { width: 100%; height: 100%; object-fit: cover; }
+    .slate-body { padding: 2rem; }
+    .tag-expected { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #ffbc00; font-weight: 700; display: block; margin-bottom: 0.5rem; }
+    .slate-body h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; }
+    .slate-body p { color: #888; font-size: 14px; line-height: 1.7; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="title-block">
+        <h1>The Production Slate</h1>
+        <p class="text-muted mt-2 font-weight-light">Extended Catalog & Conceptual Phase Registries</p>
+    </div>
+
+    <div class="archive-grid">
+        {% if projects %}
+            {% for proj in projects %}
+                <div class="slate-card">
+                    <div class="slate-img">
+                        <img src="{{ proj.cover_image.url }}" alt="{{ proj.title }}">
+                    </div>
+                    <div class="slate-body">
+                        {% if proj.release_expected %}
+                            <span class="tag-expected">Development Pipeline // {{ proj.release_expected }}</span>
+                        {% endif %}
+                        <h3>{{ proj.title }}</h3>
+                        <p>{{ proj.description|linebreaksbr }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center py-5 text-muted small">The production pipeline index is currently empty.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const lenis = new Lenis();
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.to(".slate-card", { opacity: 1, y: 0, stagger: 0.1, duration: 1, ease: "power3.out" });
+</script>
+{% endblock %}

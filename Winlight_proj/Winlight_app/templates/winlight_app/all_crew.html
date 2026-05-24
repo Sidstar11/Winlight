@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crew Directory Archive | Winlight Studio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #050505; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        
+        /* Shared Global Dark Navbar Style Injection */
+        .navbar { padding: 1.5rem 2rem; z-index: 100; background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%); }
+        .navbar-brand { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: 2px; text-decoration: none; color: white;}
+        .reel-tag { color: white; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 6px 16px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); text-decoration: none; transition: all 0.3s ease; }
+        .reel-tag:hover { background: #fff; color: #000; }
+
+        .title-block { text-align: center; margin-top: 20vh; margin-bottom: 4rem; }
+        .title-block h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 8vw, 5.5rem); font-style: italic; font-weight: 900; }
+        
+        /* Extended Grid Presentation Framework Layout rules */
+        .crew-showcase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 3rem; margin-bottom: 6rem; }
+        
+        .artisan-box-card { background: #0c0c0c; border: 1px solid #161616; border-radius: 16px; overflow: hidden; height: 380px; position: relative; opacity: 0; transform: scale(0.9) translateY(30px); transition: border-color 0.4s ease; }
+        .artisan-box-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.4); transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+        .artisan-box-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,1) 25%, rgba(0,0,0,0.2) 70%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem; }
+        
+        .artisan-box-card:hover { border-color: #444; }
+        .artisan-box-card:hover img { filter: grayscale(0); transform: scale(1.03); }
+        
+        .artisan-box-overlay h3 { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+        .artisan-box-overlay p { color: #ffbc00; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; margin: 0; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark fixed-top px-4 d-flex">
+        <a class="navbar-brand" href="{% url 'studio_home' %}">WINLIGHT</a>
+        <div class="ms-auto d-flex gap-2 gap-md-3 align-items-center">
+            <a href="{% url 'recent_archive' %}" class="reel-tag">Portfolio Vault</a>
+            <a href="{% url 'pipeline_archive' %}" class="reel-tag">Upcoming Slate</a>
+            <a href="{% url 'crew_archive' %}" class="reel-tag">Crew Roster</a>
+            <a href="{% url 'editorial_archive' %}" class="reel-tag">Editorial Vault</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="title-block">
+            <h1>The Extended Crew</h1>
+            <p class="text-muted mt-2 font-weight-light">The Visual Architects & Practical Engineers Behind Winlight Framework Operations</p>
+        </div>
+
+        <div class="crew-showcase-grid">
+            {% if crew_members %}
+                {% for member in crew_members %}
+                    <div class="artisan-box-card">
+                        <img src="{{ member.photo.url }}" alt="{{ member.name }}">
+                        <div class="artisan-box-overlay">
+                            <h3>{{ member.name }}</h3>
+                            <p>{{ member.role }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center py-5 text-muted small font-weight-light">No additional staff records registered inside this directory sequence database.</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script>
+        const lenis = new Lenis();
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        
+        // Staggered cinematic perspective card grid popup expansion reveal logic
+        gsap.to(".artisan-box-card", { opacity: 1, scale: 1, y: 0, stagger: 0.08, duration: 1.1, ease: "power4.out" });
+    </script>
+</body>
+</html>

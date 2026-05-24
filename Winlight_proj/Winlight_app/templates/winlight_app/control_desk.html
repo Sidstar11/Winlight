@@ -1,0 +1,112 @@
+{% extends 'Winlight_app/base.html' %}
+
+{% block title %}Control Desk Workspace | Winlight Studio{% endblock %}
+
+{% block extra_css %}
+<style>
+    body { background: #141518; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .admin-container { max-width: 800px; margin: 18vh auto 6rem auto; padding: 2rem; background: #1c1d22; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+    .admin-title-block { border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+    .admin-title-block h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-style: italic; font-weight: 900; }
+    
+    .nav-tabs { border-bottom: 1px solid #2d3037 !important; }
+    .nav-link { color: #888 !important; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; border: none !important; padding: 10px 20px !important; }
+    .nav-link.active { color: #fff !important; background: #23252b !important; border-radius: 6px 6px 0 0; }
+    
+    .modern-input, .modern-file-input { background: #23252b !important; border: 1px solid #32353e !important; color: #fff !important; padding: 12px 16px; border-radius: 8px; margin-bottom: 1.25rem; width: 100%; }
+    .form-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #b0b3b8; font-weight: 700; margin-bottom: 6px; display: block; }
+    .btn-submit { background: #fff; color: #000; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 13px; padding: 14px; border-radius: 8px; width: 100%; border: none; cursor: pointer; transition: background 0.2s; }
+    .btn-submit:hover { background: #e4e6eb; }
+    .modern-checkbox { width: 20px; height: 20px; accent-color: #ffffff; cursor: pointer; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-container">
+        
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <div class="alert alert-dark border-secondary bg-black text-white small p-3" role="alert">
+                        <span class="text-uppercase font-weight-bold d-block mb-1" style="font-size:10px; color:#ffbc00; letter-spacing:1px;">System Confirmation</span>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="admin-title-block">
+            <h1>Control Desk Terminal</h1>
+            <p class="text-muted small m-0">Central Database Upload Station for Media Slates, Asset Portfolios, & Personnel Records</p>
+        </div>
+
+        <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+            <li class="nav-item"><button class="nav-link active" id="recent-tab" data-bs-toggle="tab" data-bs-target="#recent-pane" type="button">Recent Work</button></li>
+            <li class="nav-item"><button class="nav-link" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming-pane" type="button">Upcoming Slate</button></li>
+            <li class="nav-item"><button class="nav-link" id="crew-tab" data-bs-toggle="tab" data-bs-target="#crew-pane" type="button">Crew Profile</button></li>
+            <li class="nav-item"><button class="nav-link" id="article-tab" data-bs-toggle="tab" data-bs-target="#article-pane" type="button">Editorial</button></li>
+        </ul>
+        
+        <div class="tab-content" id="adminTabsContent">
+            <div class="tab-pane fade show active" id="recent-pane">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_id" value="recent_work_submit">
+                    <label class="form-label">Project Headline</label>{{ recent_form.title }}
+                    <label class="form-label">Media Capture Poster</label>{{ recent_form.image }}
+                    <div class="d-flex align-items-center gap-3 my-3 p-3 border border-secondary rounded" style="background:rgba(255,255,255,0.02);">
+                        {{ recent_form.is_featured }}
+                        <label class="m-0 text-white opacity-70 small">Feature inside homepage sliding slider carousel</label>
+                    </div>
+                    <button type="submit" class="btn-submit">Publish Master Archive</button>
+                </form>
+            </div>
+            
+            <div class="tab-pane fade" id="upcoming-pane">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_id" value="upcoming_project_submit">
+                    <label class="form-label">Film Title</label>{{ upcoming_form.title }}
+                    <label class="form-label">Production Target Frame</label>{{ upcoming_form.release_expected }}
+                    <label class="form-label">Script Premise Summary</label>{{ upcoming_form.description }}
+                    <label class="form-label">Teaser Visual Backdrop</label>{{ upcoming_form.cover_image }}
+                    <div class="d-flex align-items-center gap-3 my-3 p-3 border border-secondary rounded" style="background:rgba(255,255,255,0.02);">
+                        {{ upcoming_form.is_featured }}
+                        <label class="m-0 text-white opacity-70 small">Feature directly on landing page portfolio</label>
+                    </div>
+                    <button type="submit" class="btn-submit">Log Deployment Roadmap</button>
+                </form>
+            </div>
+            
+            <div class="tab-pane fade" id="crew-pane">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_id" value="crew_submit">
+                    <label class="form-label">Artisan Operator Name</label>{{ crew_form.name }}
+                    <label class="form-label">Department Role Specification</label>{{ crew_form.role }}
+                    <label class="form-label">Sort Priority Rank</label>{{ crew_form.display_order }}
+                    <label class="form-label">Headshot Profile Capture</label>{{ crew_form.photo }}
+                    <button type="submit" class="btn-submit">Register Core Personnel</button>
+                </form>
+            </div>
+            
+            <div class="tab-pane fade" id="article-pane">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_id" value="article_submit">
+                    <label class="form-label">Headline Title</label>{{ article_form.title }}
+                    <label class="form-label">Index Feed Summary Card</label>{{ article_form.summary }}
+                    <label class="form-label">Full Narrative Body Text</label>{{ article_form.content }}
+                    <label class="form-label">Featured Article Backdrop Thumbnail</label>{{ article_form.thumbnail }}
+                    <div class="d-flex align-items-center gap-3 my-3 p-3 border border-secondary rounded" style="background:rgba(255,255,255,0.02);">
+                        {{ article_form.is_featured }}
+                        <label class="m-0 text-white opacity-70 small">Feature directly on landing page portfolio</label>
+                    </div>
+                    <button type="submit" class="btn-submit">Distribute Timeline Dispatch</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
