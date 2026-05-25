@@ -9,11 +9,11 @@ class RecentWork(models.Model):
 
     class Meta:
         ordering = ['-uploaded_at']
+        db_table = 'winlight_app_recentwork'  # Forces lowercase mapping to match SQLite table
 
     def __str__(self):
         return self.title
 
-# (Keep your UpcomingProject, CrewMember, and Article models exactly as they are)
 
 class UpcomingProject(models.Model):
     title = models.CharField(max_length=200)
@@ -23,8 +23,12 @@ class UpcomingProject(models.Model):
     # Boolean filter to toggle main landing page spotlight
     is_featured = models.BooleanField(default=True, verbose_name="Feature on Homepage")
 
+    class Meta:
+        db_table = 'winlight_app_upcomingproject'  # Forces lowercase mapping
+
     def __str__(self):
         return self.title
+
 
 class CrewMember(models.Model):
     name = models.CharField(max_length=150)
@@ -36,9 +40,12 @@ class CrewMember(models.Model):
 
     class Meta:
         ordering = ['display_order', 'name']
+        db_table = 'winlight_app_crewmember'  # Forces lowercase mapping
 
     def __str__(self):
         return f"{self.name} - {self.role}"
+
+
 class Article(models.Model):
     title = models.CharField(max_length=250)
     summary = models.TextField(max_length=500)
@@ -50,6 +57,7 @@ class Article(models.Model):
 
     class Meta:
         ordering = ['-published_date']
+        db_table = 'winlight_app_article'  # Forces lowercase mapping
 
     def __str__(self):
         return self.title
